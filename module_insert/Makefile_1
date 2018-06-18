@@ -1,1 +1,2 @@
-obj-m :- module_1.o
+obj-m += module_1.o
+
