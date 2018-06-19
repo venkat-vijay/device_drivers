@@ -1,0 +1,1 @@
+cmd_/home/vijay/Desktop/device_module/ioctl/ioctl.ko := ld -r -m elf_x86_64 -z max-page-size=0x200000 -T ./scripts/module-common.lds --build-id  -o /home/vijay/Desktop/device_module/ioctl/ioctl.ko /home/vijay/Desktop/device_module/ioctl/ioctl.o /home/vijay/Desktop/device_module/ioctl/ioctl.mod.o ;  true

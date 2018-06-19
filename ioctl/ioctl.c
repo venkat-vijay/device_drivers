@@ -1,18 +1,23 @@
 #include <linux/module.h>
 #include <linux/version.h>
-#include <linux/kernel.h>
-#include <linux/types.h>
-#include <linux/kdev_t.h>
 #include <linux/fs.h>
-#include <linux/device.h>
 #include <linux/cdev.h>
+#include <linux/errno.h>
+#include <linux/device.h>
+#include <linux/types.h>
+#include <linux/delay.h>
+#include <linux/ioctl.h>
 #include <asm/uaccess.h>
+#include <asm/io.h>
+
+#include <linux/serial_reg.h>
+#define IOC_MAGIC 'k'
+#define IOCTL_HELLO _IO(IOC_MAGIC,0)
 
 static dev_t first; // Global variable for the first device number
 static struct cdev c_dev; // Global variable for the character device structure
 static struct class *cl; // Global variable for the device class
 
-static char c;
 
 static int my_open(struct inode *i, struct file *f)
 {
@@ -24,59 +29,30 @@ static int my_close(struct inode *i, struct file *f)
     printk(KERN_INFO "Driver: close()\n");
     return 0;
 }
-static ssize_t my_read(struct file *f, char __user *buf, size_t len, loff_t *off)
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,35))
+static int my_ioctl(struct inode *i, struct file *f, unsigned int cmd, unsigned long arg)
+#else
+static long my_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
+#endif
 {
-    printk(KERN_INFO "Driver: read()\n");
-    buf[0] = c;
-    return 1;
-}
-/*static ssize_t my_read(struct file *f, char __user *buf, size_t len, loff_t *off)
-{
-    printk(KERN_INFO "Driver: read()\n");
-    if (copy_to_user(buf, &c, 1) != 0)
-        return -EFAULT;
-   else
-       return 1;
-}*/
-/*static ssize_t my_read(struct file *f, char __user *buf, size_t len, loff_t *off)
-{
-    printk(KERN_INFO "Driver: read()\n");
-    if (*off == 0)
-    {
-        if (raw_copy_to_user(buf, &c, 1) != 0)
-            return -EFAULT;
-        else
-        {
-            (*off)++;
-            return 1;
-        }
-    }
-    else
-        return 0;
-}*/
+	switch (cmd)
+	{
+		case IOCTL_HELLO :
+			printk(KERN_INFO "Hello ioctl world");
+			break;
+		default:
+			return -EINVAL;
+	}
 
-/*static ssize_t my_write(struct file *f, const char __user *buf, size_t len, loff_t *off)
-{
-    printk(KERN_INFO "Driver: write()\n");
-    if (raw_copy_from_user(&c, buf+len-1, 1) != 0)
-        return -EFAULT;
-    else
-        return len;
-}*/
-
-static ssize_t my_write(struct file *f, const char __user *buf, size_t len, loff_t *off)
-{
-   printk(KERN_INFO "Driver: write()\n");
-    c = buf[(len - 1)];
-    return len;
+	return 0;
 }
 static struct file_operations pugs_fops =
 {
     .owner = THIS_MODULE,
     .open = my_open,
     .release = my_close,
-    .read = my_read,
-    .write = my_write
+    .unlocked_ioctl = my_ioctl
+
 };
 
 static int __init ofcd_init(void) /* Constructor */

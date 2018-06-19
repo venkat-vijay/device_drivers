@@ -1,6 +1,5 @@
 
-
-.......................... manual add............................
+...................... Manual add......................................
 dmesg -w         // wait 
 dmesg -c        // clear debbug mesg
 ls -l /dev/ | grep “^c”               // print all char device
@@ -9,17 +8,6 @@ ls -l /dev | grep "major_no,"       list devices_no
 mknod /dev/name0 c major_no minor_no       
 ls -l /dev/name*
 
-
-
-........................Automatic verification.....................
-ls /sys/class/                 // class device added location
- 
-ls -l /sys/class/chardrv_vijay/    // files inside class
-
-ls -l /sys/class/chardrv_vijay/vijay_null/   //  files  inside  null device
-
-cat /sys/class/chardrv_vijay/vijay_null/dev
-
-ls -l /dev/vijay_null
-
-
+.......................Automatic add check...............................
+ls /sys/class/                // check device class added
+ls -l /sys/class/vijay_

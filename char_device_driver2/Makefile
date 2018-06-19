@@ -1,4 +1,4 @@
-obj-m:=device_demo.o
+obj-m:=device_demo_11.o
 
 all:
 	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
