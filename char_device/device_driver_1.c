@@ -10,10 +10,11 @@ static dev_t first;                 // global variable for the device number
 
 static int __init device_init(void)    // constructor
 {
+	int x;
 	printk(KERN_INFO "DEVICE IS REGISTRED");
-	if (alloc_chrdev_region(&first, 0, 3, "vijay")<0)
+	if ((alloc_chrdev_region(&first, 0, 3, "vijay"))<0)
 	{
-		return -1;
+		return x;
 	}
 	printk(KERN_INFO "<Major,Minor>:<%d,%d>\n",MAJOR(first),MINOR(first));
 	return 0;

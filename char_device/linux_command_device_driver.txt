@@ -1,0 +1,8 @@
+dmesg -w         // wait 
+dmesg -c        // clear debbug mesg
+cat /proc/devices   // device name
+ls -l /dev | grep "device_no,"
+mknod /dev/name0 c device_no 0
+ls -l /dev/name*
+
+
