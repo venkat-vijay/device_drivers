@@ -1,0 +1,1 @@
+cmd_/home/vijay/Desktop/device_module/serial_io_device/serial_led.ko := ld -r -m elf_x86_64 -z max-page-size=0x200000 -T ./scripts/module-common.lds --build-id  -o /home/vijay/Desktop/device_module/serial_io_device/serial_led.ko /home/vijay/Desktop/device_module/serial_io_device/serial_led.o /home/vijay/Desktop/device_module/serial_io_device/serial_led.mod.o ;  true
